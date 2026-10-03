@@ -1,305 +1,315 @@
- <!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neutral Basics</title>
+<meta name="description" content="Neutral Basics. Nothing more. Nothing less.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#16302a; --green-2:#1d3d35; --cream:#efe6d2; --mustard:#d9a82b; --ink:#0f211c; --muted:#b9b39f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--green);color:var(--cream);font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5}
+  a{color:inherit}
+  header{position:sticky;top:0;z-index:20;background:rgba(22,48,42,.96);backdrop-filter:blur(6px);border-bottom:1px solid #2c5247}
+  .bar{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand svg{width:34px;height:34px}
+  .brand span{color:var(--mustard);font-weight:800;letter-spacing:.18em;font-size:15px}
+  .cart-btn{background:var(--mustard);color:var(--ink);border:0;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer;font-size:14px}
+  .hero{max-width:1100px;margin:0 auto;padding:72px 16px 48px;text-align:center}
+  .hero h1{font-size:clamp(34px,7vw,64px);letter-spacing:.04em;font-weight:800;color:var(--mustard)}
+  .hero p{margin-top:12px;color:var(--cream);opacity:.85;font-size:18px}
+  .hero a.cta{display:inline-block;margin-top:28px;background:var(--cream);color:var(--ink);padding:12px 26px;border-radius:999px;font-weight:700;text-decoration:none}
+  main{max-width:1100px;margin:0 auto;padding:16px 16px 80px}
+  h2{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:24px 0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .card{background:var(--green-2);border:1px solid #2c5247;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .img{aspect-ratio:4/5;background:linear-gradient(135deg,#27483f,#1a362f);display:flex;align-items:center;justify-content:center}
+  .img img{width:100%;height:100%;object-fit:cover}
+  .img svg{width:64px;height:64px;opacity:.5}
+  .info{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .name{font-weight:700}
+  .desc{font-size:13px;color:var(--muted)}
+  .price{color:var(--mustard);font-weight:800;font-size:18px}
+  .sizes{display:flex;gap:6px;flex-wrap:wrap}
+  .sizes button{background:transparent;border:1px solid #4a6e63;color:var(--cream);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:13px}
+  .sizes button.on{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+  .add{margin-top:auto;background:var(--mustard);color:var(--ink);border:0;border-radius:10px;padding:11px;font-weight:800;cursor:pointer}
+  .add[disabled]{background:#4a6e63;color:#9fb5ac;cursor:not-allowed}
+  .note{color:var(--muted);font-size:13px;margin-top:10px}
+  /* drawer */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:30}
+  .overlay.open{display:block}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:var(--green);border-left:1px solid #2c5247;z-index:40;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+  .drawer.open{transform:none}
+  .drawer header{position:static;padding:16px;display:flex;justify-content:space-between;align-items:center}
+  .drawer h3{letter-spacing:.15em;font-size:14px;text-transform:uppercase}
+  .x{background:none;border:0;color:var(--cream);font-size:26px;cursor:pointer}
+  .items{flex:1;overflow:auto;padding:0 16px}
+  .row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #2c5247}
+  .row small{color:var(--muted)}
+  .qty{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .qty button{width:26px;height:26px;border-radius:50%;border:1px solid #4a6e63;background:none;color:var(--cream);cursor:pointer}
+  .foot{padding:16px;border-top:1px solid #2c5247;display:flex;flex-direction:column;gap:10px}
+  .foot input,.foot textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #4a6e63;background:var(--green-2);color:var(--cream);font:inherit}
+  .total{display:flex;justify-content:space-between;font-weight:800;font-size:18px}
+  .wa{background:#25d366;color:#08331a;border:0;border-radius:10px;padding:13px;font-weight:800;cursor:pointer;font-size:15px}
+  .empty{color:var(--muted);padding:30px 0;text-align:center}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 16px;border-top:1px solid #2c5247}
 
-  <title>Neutral Basics — Nothing more. Nothing less.</title>
+  /* ---- scroll story ---- */
+  .story{position:relative;height:400vh}
+  .stage{position:sticky;top:0;height:100vh;overflow:hidden;background:radial-gradient(ellipse at 50% 0%,#2a5247 0%,#16302a 55%,#0d1f1a 100%)}
+  .beam{position:absolute;top:0;left:50%;width:min(520px,80vw);height:75%;transform:translateX(-50%);background:linear-gradient(180deg,rgba(239,230,210,.22),rgba(239,230,210,0));clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);filter:blur(6px)}
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;opacity:0;transition:opacity .5s linear;pointer-events:none}
+  .scene.on{opacity:1}
+  .scene .pic{width:min(300px,62vw);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#27483f,#1a362f);display:flex;align-items:center;justify-content:center;margin-bottom:28px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .scene .pic img{width:100%;height:100%;object-fit:cover}
+  .scene .pic svg{width:70px;opacity:.5}
+  .scene h2{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-weight:500;text-transform:none;letter-spacing:0;color:var(--cream);font-size:clamp(38px,8vw,84px);line-height:1.05;margin:0}
+  .scene p{margin-top:14px;max-width:420px;color:var(--muted);font-size:15px}
+  .scene .go{pointer-events:auto;margin-top:26px;display:inline-block;background:var(--mustard);color:var(--ink);padding:13px 30px;border-radius:999px;font-weight:800;letter-spacing:.14em;font-size:13px;text-decoration:none;text-transform:uppercase}
+  .hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+  .dots{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:#4a6e63}
+  .dots i.on{background:var(--mustard)}
+  .ig{position:fixed;left:16px;bottom:16px;z-index:15;display:flex;align-items:center;gap:8px;color:var(--cream);text-decoration:none;font-size:12px;letter-spacing:.12em;font-weight:700;opacity:.85}
+  .ig[hidden]{display:none}
+  .ig svg{width:20px;height:20px}
+  @media (prefers-reduced-motion:reduce){.scene{transition:none}}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4eadb;
-      color: #29251f;
-    }
-
-    header {
-      padding: 22px 6%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #d8c8b2;
-      background: #f8f1e7;
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-
-    nav a {
-      color: #29251f;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 14px;
-    }
-
-    .hero {
-      min-height: 75vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px 20px;
-      background: #eadbc7;
-    }
-
-    .hero h1 {
-      font-size: clamp(42px, 9vw, 90px);
-      letter-spacing: -3px;
-      font-weight: 700;
-    }
-
-    .hero p {
-      margin-top: 15px;
-      font-size: 16px;
-      letter-spacing: 2px;
-    }
-
-    .shop-btn {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 14px 30px;
-      background: #29251f;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 2px;
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-
-    section {
-      padding: 70px 6%;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 30px;
-      margin-bottom: 40px;
-      letter-spacing: 1px;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 25px;
-    }
-
-    .product {
-      background: #f8f1e7;
-      padding-bottom: 22px;
-    }
-
-    .product img {
-      width: 100%;
-      aspect-ratio: 1 / 1.15;
-      object-fit: cover;
-      display: block;
-      background: #dfd0bb;
-    }
-
-    .product-info {
-      padding: 18px;
-    }
-
-    .product h3 {
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .price {
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .sizes {
-      font-size: 13px;
-      color: #74695c;
-      margin-bottom: 15px;
-    }
-
-    .whatsapp {
-      display: block;
-      text-align: center;
-      padding: 12px;
-      background: #29251f;
-      color: white;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    .about {
-      background: #f8f1e7;
-      text-align: center;
-    }
-
-    .about p {
-      max-width: 650px;
-      margin: auto;
-      line-height: 1.8;
-      color: #5f564b;
-    }
-
-    .contact {
-      text-align: center;
-      background: #eadbc7;
-    }
-
-    .contact a {
-      color: #29251f;
-      text-decoration: none;
-      display: inline-block;
-      margin: 8px 15px;
-      font-weight: 600;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      background: #29251f;
-      color: #f4eadb;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        padding: 18px 5%;
-      }
-
-      nav a {
-        margin-left: 10px;
-        font-size: 12px;
-      }
-
-      section {
-        padding: 55px 5%;
-      }
-    }
-  </style>
+  .img{cursor:pointer;position:relative}
+  .img img{position:absolute;inset:0}
+  .thumbs{display:flex;gap:6px;padding:10px 14px 0}
+  .thumbs img{width:40px;height:50px;object-fit:cover;border-radius:6px;opacity:.5;border:1px solid transparent;cursor:pointer}
+  .thumbs img.on{opacity:1;border-color:var(--mustard)}
+  .sizes button[disabled]{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+  .left{font-size:12px;color:var(--mustard);min-height:16px}
+  .tag{position:absolute;top:10px;left:10px;background:var(--cream);color:var(--ink);font-size:11px;font-weight:800;letter-spacing:.12em;padding:4px 9px;border-radius:999px;text-transform:uppercase;z-index:2}
+</style>
 </head>
-
 <body>
 
-  <header>
-    <div class="logo">NEUTRAL BASICS</div>
-
-    <nav>
-      <a href="#shop">Shop</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <h1>Neutral Basics</h1>
-    <p>Nothing more. Nothing less.</p>
-
-    <a href="#shop" class="shop-btn">SHOP COLLECTION</a>
-  </section>
-
-  <section id="shop">
-
-    <h2 class="section-title">Latest Collection</h2>
-
-    <div class="products">
-
-      <div class="product">
-        <img src="https://placehold.co/800x900/e0d1bc/29251f?text=Neutral+Basics"
-             alt="Neutral Basics T-Shirt">
-
-        <div class="product-info">
-          <h3>Acid Wash Oversized Tee</h3>
-          <div class="price">₹449</div>
-          <div class="sizes">Available: M · L · XL</div>
-
-          <a class="whatsapp"
-             href="https://wa.me/919384615349?text=Hi%20Neutral%20Basics,%20I%20want%20to%20order%20the%20Acid%20Wash%20Oversized%20Tee.%20Price:%20₹449"
-             target="_blank">
-            ORDER ON WHATSAPP
-          </a>
-        </div>
-      </div>
-
-
-      <div class="product">
-        <img src="https://placehold.co/800x900/d8c6ae/29251f?text=Neutral+Basics"
-             alt="Neutral Basics T-Shirt">
-
-        <div class="product-info">
-          <h3>Oversized Graphic Tee</h3>
-          <div class="price">₹449</div>
-          <div class="sizes">Available: M · L · XL</div>
-
-          <a class="whatsapp"
-             href="https://wa.me/919384615349?text=Hi%20Neutral%20Basics,%20I%20want%20to%20order%20the%20Oversized%20Graphic%20Tee.%20Price:%20₹449"
-             target="_blank">
-            ORDER ON WHATSAPP
-          </a>
-        </div>
-      </div>
-
-
-      <div class="product">
-        <img src="https://placehold.co/800x900/cdbba1/29251f?text=Neutral+Basics"
-             alt="Neutral Basics T-Shirt">
-
-        <div class="product-info">
-          <h3>Waffle Knit Full Sleeve Tee</h3>
-          <div class="price">₹449</div>
-          <div class="sizes">Available: M · L · XL</div>
-
-          <a class="whatsapp"
-             href="https://wa.me/919384615349?text=Hi%20Neutral%20Basics,%20I%20want%20to%20order%20the%20Waffle%20Knit%20Full%20Sleeve%20Tee.%20Price:%20₹449"
-             target="_blank">
-            ORDER ON WHATSAPP
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <section class="about" id="about">
-
-    <h2 class="section-title">About Neutral Basics</h2>
-
-    <p>
-      Neutral Basics is built around everyday clothing with a clean,
-      modern and effortless approach. Simple pieces, considered details
-      and styles made for everyday wear.
-    </p>
-
-  </section>
-
-
-  <section class="contact" id="contact">
-
-    <h2 class="section-title">Connect With Us</h2>
-
-    <a href="https://instagram.com/neutral_basics_" target="_blank">
-      Instagram
+<header>
+  <div class="bar">
+    <a class="brand" href="#top" aria-label="Neutral Basics">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#efe6d2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M24 14a4 4 0 1 1 4 4c-2 0-4 1-4 3v2"/>
+        <path d="M24 23 6 36h36L24 23z"/>
+      </svg>
+      <span>NEUTRAL BASICS</span>
     </a>
+    <button class="cart-btn" id="openCart">Cart (<span id="count">0</span>)</button>
+  </div>
+</header>
 
-    <a href="https://wa.me/919384615349" target="_blank">
-      WhatsApp
-    </a>
+<section class="story" id="top">
+  <div class="stage">
+    <div class="beam"></div>
+    <div class="scene on"><div class="pic" data-scene="0"><svg viewBox="0 0 48 48" fill="none" stroke="#efe6d2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14a4 4 0 1 1 4 4c-2 0-4 1-4 3v2"/><path d="M24 23 6 36h36L24 23z"/></svg></div><h2>Nothing more.<br>Nothing less.</h2><p>Everyday tees in honest, neutral tones.</p></div>
+    <div class="scene"><div class="pic" data-scene="1"><svg viewBox="0 0 48 48" fill="none" stroke="#efe6d2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14a4 4 0 1 1 4 4c-2 0-4 1-4 3v2"/><path d="M24 23 6 36h36L24 23z"/></svg></div><h2>Cut to be<br>lived in.</h2><p>Oversized fits and soft washes that go with everything.</p></div>
+    <div class="scene"><div class="pic" data-scene="2"><svg viewBox="0 0 48 48" fill="none" stroke="#efe6d2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14a4 4 0 1 1 4 4c-2 0-4 1-4 3v2"/><path d="M24 23 6 36h36L24 23z"/></svg></div><h2>Plain by<br>design.</h2><p>No loud prints. Just the basics, done properly.</p></div>
+    <div class="scene"><div class="pic" data-scene="3"><svg viewBox="0 0 48 48" fill="none" stroke="#efe6d2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 14a4 4 0 1 1 4 4c-2 0-4 1-4 3v2"/><path d="M24 23 6 36h36L24 23z"/></svg></div><h2>The first drop<br>is here.</h2><a class="go" href="#shop">Enter the drop</a></div>
+    <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+    <div class="hint">Scroll</div>
+  </div>
+</section>
 
-  </section>
+<main id="shop">
+  <h2>The Collection</h2>
+  <div class="grid" id="grid"></div>
+  <p class="note" id="status"></p>
+</main>
 
+<footer>© <span id="yr"></span> Neutral Basics · Orders are confirmed manually on WhatsApp.</footer>
 
-  <footer>
-    © 2026 NEUTRAL BASICS · NOTHING MORE. NOTHING LESS.
-  </footer>
+<a class="ig" id="ig" href="#" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span id="igt"></span></a>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Cart">
+  <header><h3>Your cart</h3><button class="x" id="closeCart" aria-label="Close">×</button></header>
+  <div class="items" id="items"></div>
+  <div class="foot" id="foot">
+    <div class="total"><span>Total</span><span id="total">₹0</span></div>
+    <input id="cName" placeholder="Your name">
+    <textarea id="cAddr" rows="2" placeholder="Delivery address / city"></textarea>
+    <button class="wa" id="checkout">Send order on WhatsApp</button>
+    <small style="color:var(--muted)">We'll confirm availability, shipping and payment with you on WhatsApp.</small>
+  </div>
+</aside>
 
+<script>
+/* ============ CONFIG: edit these ============ */
+const CONFIG = {
+  WHATSAPP: "919384615349",          // country code + number, no + or spaces
+  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj7ktT3NmkMnsf7JuMV0YyJZZnA1PiPcuXNdLDsD_4JBLgCNWdLsFIfja_-P3JlxrWcOkr_zuExs7Z/pub?output=csv",
+  IMAGE_BASE: "",                    // "" = images sit next to index.html. Use "images/" if they are in a folder.
+  CURRENCY: "₹",
+  INSTAGRAM: "",                     // your handle without @ (blank hides the link)
+  SCENES: []                         // optional: 4 image file names for the intro. Blank = first 4 products' photos
+};
+/* ============================================ */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => CONFIG.CURRENCY + Number(n || 0).toLocaleString("en-IN");
+const imgUrl = f => /^https?:/i.test(f) ? f : CONFIG.IMAGE_BASE + encodeURI(f);
+let products = [];
+let cart = [];
+try { cart = JSON.parse(localStorage.getItem("nb_cart") || "[]"); } catch(e){}
+const save = () => { try { localStorage.setItem("nb_cart", JSON.stringify(cart)); } catch(e){} };
+
+function parseCSV(text){
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"' && text[i+1] === '"'){ cur += '"'; i++; }
+      else if (c === '"') q = false;
+      else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === ","){ row.push(cur); cur = ""; }
+    else if (c === "\n" || c === "\r"){
+      if (c === "\r" && text[i+1] === "\n") i++;
+      row.push(cur); cur = ""; rows.push(row); row = [];
+    } else cur += c;
+  }
+  if (cur || row.length){ row.push(cur); rows.push(row); }
+  const head = rows.shift().map(h => h.trim().toLowerCase());
+  return rows.filter(r => r.some(v => v.trim())).map(r => {
+    const o = {}; head.forEach((h, i) => o[h] = (r[i] || "").trim()); return o;
+  });
+}
+
+function toProduct(o, id){
+  const sizes = (o["sizes"] || "").split(/[|,\/]/).map(x => x.trim()).filter(Boolean);
+  const variants = sizes.map(sz => {
+    const raw = o[sz.toLowerCase() + " size"];
+    let qty = raw === undefined || raw === "" ? 99 : Number(raw);
+    if (isNaN(qty)) qty = 0;                 // "-" means not available
+    return {size: sz, qty};
+  });
+  const inStock = o["in_stock"] === undefined || /^(yes|y|true|1)$/i.test(o["in_stock"]);
+  const images = [1,2,3,4].map(n => o["image " + n]).filter(Boolean);
+  const sold = !inStock || (variants.length && variants.every(v => v.qty <= 0));
+  return {id, name:o["name"], price:Number(String(o["price"]).replace(/[^\d.]/g,"")) || 0, variants, images, sold};
+}
+
+async function load(){
+  try {
+    const res = await fetch(CONFIG.SHEET_CSV_URL, {cache:"no-store"});
+    if (!res.ok) throw new Error(res.status);
+    products = parseCSV(await res.text()).filter(o => o["name"]).map(toProduct);
+  } catch(e){
+    products = [];
+    $("status").textContent = "Couldn't load products right now. Please refresh, or message us on WhatsApp.";
+  }
+  render(); setScenes();
+}
+
+const hangerIcon = '<svg viewBox="0 0 48 48" fill="none" stroke="#efe6d2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:64px;opacity:.5"><path d="M24 14a4 4 0 1 1 4 4c-2 0-4 1-4 3v2"/><path d="M24 23 6 36h36L24 23z"/></svg>';
+const picked = {}, shown = {};
+
+function render(){
+  $("grid").innerHTML = products.map(p => {
+    const idx = shown[p.id] || 0, v = p.variants.find(v => v.size === picked[p.id]);
+    const thumbs = p.images.length > 1 ? `<div class="thumbs">${p.images.map((f, i) =>
+      `<img loading="lazy" src="${esc(imgUrl(f))}" data-th="${p.id}" data-i="${i}" class="${i === idx ? "on" : ""}" alt="">`).join("")}</div>` : "";
+    const sizes = p.variants.length ? `<div class="sizes">${p.variants.map(x =>
+      `<button type="button" data-size="${esc(x.size)}" data-pid="${p.id}" ${x.qty <= 0 ? "disabled" : ""} class="${picked[p.id] === x.size ? "on" : ""}">${esc(x.size)}</button>`).join("")}</div>` : "";
+    const left = v && v.qty <= 3 ? `Only ${v.qty} left` : "";
+    return `<article class="card">
+      <div class="img" data-cycle="${p.id}">${p.sold ? '<span class="tag">Sold out</span>' : ""}
+        ${hangerIcon}${p.images.length ? `<img src="${esc(imgUrl(p.images[idx]))}" alt="${esc(p.name)}" onerror="this.style.display='none'">` : ""}</div>
+      ${thumbs}
+      <div class="info">
+        <div class="name">${esc(p.name)}</div>
+        <div class="price">${p.price ? money(p.price) : "Price on WhatsApp"}</div>
+        ${sizes}
+        <div class="left">${left}</div>
+        <button class="add" data-add="${p.id}" ${p.sold ? "disabled" : ""}>${p.sold ? "Sold out" : "Add to cart"}</button>
+      </div></article>`;
+  }).join("");
+}
+
+$("grid").addEventListener("click", e => {
+  const th = e.target.closest("[data-th]");
+  if (th){ shown[th.dataset.th] = +th.dataset.i; render(); return; }
+  const cy = e.target.closest("[data-cycle]");
+  if (cy){ const p = products[+cy.dataset.cycle]; if (p.images.length > 1){ shown[p.id] = ((shown[p.id] || 0) + 1) % p.images.length; render(); } return; }
+  const sz = e.target.closest("[data-size]");
+  if (sz){ picked[sz.dataset.pid] = sz.dataset.size; render(); return; }
+  const add = e.target.closest("[data-add]");
+  if (add){
+    const p = products[+add.dataset.add];
+    if (p.variants.length && !picked[p.id]){ alert("Please pick a size first."); return; }
+    const v = p.variants.find(v => v.size === picked[p.id]) || {size:"", qty:99};
+    const hit = cart.find(c => c.name === p.name && c.size === v.size);
+    if (hit){ if (hit.qty >= v.qty){ alert("Only " + v.qty + " available in this size."); return; } hit.qty++; }
+    else cart.push({name:p.name, size:v.size, price:p.price, qty:1, max:v.qty});
+    save(); drawCart(); openCart();
+  }
+});
+
+function drawCart(){
+  $("count").textContent = cart.reduce((a, c) => a + c.qty, 0);
+  $("items").innerHTML = cart.length ? cart.map((c, i) => `
+    <div class="row"><div>
+      <div>${esc(c.name)}</div><small>${c.size ? "Size " + esc(c.size) : ""}</small>
+      <div class="qty"><button data-dec="${i}">−</button>${c.qty}<button data-inc="${i}">+</button></div>
+    </div><div>${c.price ? money(c.price * c.qty) : ""}</div></div>`).join("")
+    : '<div class="empty">Your cart is empty.</div>';
+  $("total").textContent = money(cart.reduce((a, c) => a + c.price * c.qty, 0));
+  $("foot").style.display = cart.length ? "flex" : "none";
+}
+$("items").addEventListener("click", e => {
+  const d = e.target.closest("[data-dec]"), n = e.target.closest("[data-inc]");
+  if (d){ const c = cart[+d.dataset.dec]; if (--c.qty <= 0) cart.splice(+d.dataset.dec, 1); }
+  if (n){ const c = cart[+n.dataset.inc]; if (c.qty < (c.max || 99)) c.qty++; else alert("Only " + c.max + " available in this size."); }
+  if (d || n){ save(); drawCart(); }
+});
+
+function openCart(){ $("drawer").classList.add("open"); $("overlay").classList.add("open"); }
+function closeCart(){ $("drawer").classList.remove("open"); $("overlay").classList.remove("open"); }
+$("openCart").onclick = openCart; $("closeCart").onclick = closeCart; $("overlay").onclick = closeCart;
+
+$("checkout").onclick = () => {
+  const name = $("cName").value.trim(), addr = $("cAddr").value.trim();
+  if (!cart.length) return;
+  if (!name || !addr){ alert("Please add your name and address."); return; }
+  const lines = cart.map((c, i) =>
+    `${i + 1}. ${c.name}${c.size ? " (Size " + c.size + ")" : ""} x${c.qty}${c.price ? " - " + money(c.price * c.qty) : ""}`);
+  const total = cart.reduce((a, c) => a + c.price * c.qty, 0);
+  const msg = `Hi Neutral Basics! I'd like to place an order:\n\n${lines.join("\n")}\n\n` +
+    (total ? `Total: ${money(total)}\n\n` : "") + `Name: ${name}\nAddress: ${addr}`;
+  window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+};
+
+/* scroll story */
+const story = document.querySelector(".story"), scenes = [...document.querySelectorAll(".scene")], dots = [...document.querySelectorAll(".dots i")];
+function setScenes(){
+  const auto = products.filter(p => p.images.length && !p.sold).slice(0, 4).map(p => p.images[0]);
+  scenes.forEach((sc, i) => {
+    const f = CONFIG.SCENES[i] || auto[i % Math.max(auto.length, 1)];
+    if (f) sc.querySelector(".pic").innerHTML = '<img src="' + esc(imgUrl(f)) + '" alt="" onerror="this.style.display=\'none\'">';
+  });
+}
+let cur = 0;
+function tick(){
+  const r = story.getBoundingClientRect(), total = story.offsetHeight - innerHeight;
+  const p = Math.min(.999, Math.max(0, -r.top / total));
+  const i = Math.floor(p * scenes.length);
+  if (i !== cur){ scenes[cur].classList.remove("on"); dots[cur].classList.remove("on"); cur = i; scenes[cur].classList.add("on"); dots[cur].classList.add("on"); }
+  document.querySelector(".hint").style.opacity = p > .05 ? 0 : 1;
+}
+addEventListener("scroll", tick, {passive:true}); addEventListener("resize", tick); tick();
+if (CONFIG.INSTAGRAM){ const a = $("ig"); a.href = "https://instagram.com/" + CONFIG.INSTAGRAM; $("igt").textContent = "@" + CONFIG.INSTAGRAM.toUpperCase(); a.hidden = false; }
+
+$("yr").textContent = new Date().getFullYear();
+drawCart(); load();
+</script>
 </body>
-    </html>
+</html>
