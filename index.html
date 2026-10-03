@@ -1,0 +1,305 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Neutral Basics — Nothing more. Nothing less.</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4eadb;
+      color: #29251f;
+    }
+
+    header {
+      padding: 22px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #d8c8b2;
+      background: #f8f1e7;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    nav a {
+      color: #29251f;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .hero {
+      min-height: 75vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      background: #eadbc7;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 9vw, 90px);
+      letter-spacing: -3px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      margin-top: 15px;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+
+    .shop-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 30px;
+      background: #29251f;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 2px;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    section {
+      padding: 70px 6%;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+    }
+
+    .product {
+      background: #f8f1e7;
+      padding-bottom: 22px;
+    }
+
+    .product img {
+      width: 100%;
+      aspect-ratio: 1 / 1.15;
+      object-fit: cover;
+      display: block;
+      background: #dfd0bb;
+    }
+
+    .product-info {
+      padding: 18px;
+    }
+
+    .product h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .sizes {
+      font-size: 13px;
+      color: #74695c;
+      margin-bottom: 15px;
+    }
+
+    .whatsapp {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background: #29251f;
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .about {
+      background: #f8f1e7;
+      text-align: center;
+    }
+
+    .about p {
+      max-width: 650px;
+      margin: auto;
+      line-height: 1.8;
+      color: #5f564b;
+    }
+
+    .contact {
+      text-align: center;
+      background: #eadbc7;
+    }
+
+    .contact a {
+      color: #29251f;
+      text-decoration: none;
+      display: inline-block;
+      margin: 8px 15px;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #29251f;
+      color: #f4eadb;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 18px 5%;
+      }
+
+      nav a {
+        margin-left: 10px;
+        font-size: 12px;
+      }
+
+      section {
+        padding: 55px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">NEUTRAL BASICS</div>
+
+    <nav>
+      <a href="#shop">Shop</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Neutral Basics</h1>
+    <p>Nothing more. Nothing less.</p>
+
+    <a href="#shop" class="shop-btn">SHOP COLLECTION</a>
+  </section>
+
+  <section id="shop">
+
+    <h2 class="section-title">Latest Collection</h2>
+
+    <div class="products">
+
+      <div class="product">
+        <img src="https://placehold.co/800x900/e0d1bc/29251f?text=Neutral+Basics"
+             alt="Neutral Basics T-Shirt">
+
+        <div class="product-info">
+          <h3>Acid Wash Oversized Tee</h3>
+          <div class="price">₹449</div>
+          <div class="sizes">Available: M · L · XL</div>
+
+          <a class="whatsapp"
+             href="https://wa.me/919384615349?text=Hi%20Neutral%20Basics,%20I%20want%20to%20order%20the%20Acid%20Wash%20Oversized%20Tee.%20Price:%20₹449"
+             target="_blank">
+            ORDER ON WHATSAPP
+          </a>
+        </div>
+      </div>
+
+
+      <div class="product">
+        <img src="https://placehold.co/800x900/d8c6ae/29251f?text=Neutral+Basics"
+             alt="Neutral Basics T-Shirt">
+
+        <div class="product-info">
+          <h3>Oversized Graphic Tee</h3>
+          <div class="price">₹449</div>
+          <div class="sizes">Available: M · L · XL</div>
+
+          <a class="whatsapp"
+             href="https://wa.me/919384615349?text=Hi%20Neutral%20Basics,%20I%20want%20to%20order%20the%20Oversized%20Graphic%20Tee.%20Price:%20₹449"
+             target="_blank">
+            ORDER ON WHATSAPP
+          </a>
+        </div>
+      </div>
+
+
+      <div class="product">
+        <img src="https://placehold.co/800x900/cdbba1/29251f?text=Neutral+Basics"
+             alt="Neutral Basics T-Shirt">
+
+        <div class="product-info">
+          <h3>Waffle Knit Full Sleeve Tee</h3>
+          <div class="price">₹449</div>
+          <div class="sizes">Available: M · L · XL</div>
+
+          <a class="whatsapp"
+             href="https://wa.me/919384615349?text=Hi%20Neutral%20Basics,%20I%20want%20to%20order%20the%20Waffle%20Knit%20Full%20Sleeve%20Tee.%20Price:%20₹449"
+             target="_blank">
+            ORDER ON WHATSAPP
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="about" id="about">
+
+    <h2 class="section-title">About Neutral Basics</h2>
+
+    <p>
+      Neutral Basics is built around everyday clothing with a clean,
+      modern and effortless approach. Simple pieces, considered details
+      and styles made for everyday wear.
+    </p>
+
+  </section>
+
+
+  <section class="contact" id="contact">
+
+    <h2 class="section-title">Connect With Us</h2>
+
+    <a href="https://instagram.com/neutral_basics_" target="_blank">
+      Instagram
+    </a>
+
+    <a href="https://wa.me/919384615349" target="_blank">
+      WhatsApp
+    </a>
+
+  </section>
+
+
+  <footer>
+    © 2026 NEUTRAL BASICS · NOTHING MORE. NOTHING LESS.
+  </footer>
+
+</body>
+    </html>
