@@ -4,16 +4,18 @@ const CONFIG = {
   SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj7ktT3NmkMnsf7JuMV0YyJZZnA1PiPcuXNdLDsD_4JBLgCNWdLsFIfja_-P3JlxrWcOkr_zuExs7Z/pub?output=csv",
   IMAGE_BASE: "",                    // "" = images sit next to index.html. Use "images/" if they are in a folder.
   CURRENCY: "₹",
-  INSTAGRAM: "",                     // your handle without @ (blank hides the link)
+  INSTAGRAM: "neutral_basics_",      // your handle without @ (blank hides the links)
   HERO_IMAGES: ["hero-1.jpg","hero-2.jpg","hero-3.jpg","hero-4.jpg"],   // full-screen photos (landscape works best on computers)
   HERO_IMAGES_MOBILE: [],            // optional portrait versions for phones
   HERO_FOCUS: "center",              // "center", "top", "center 30%" ...
   HERO_SECONDS: 5,
-  TILES: { half: "tile-half.jpg", full: "tile-full.png" }   // photos for the two style tiles on the home page
+  TILES: { half: "tile-half.jpg", full: "tile-full.png", plain: "tile-plain.jpg" },   // photos for the style tiles on the home page
+  SIZE_CHARTS: { half: "", full: "", plain: "" }   // optional: one size chart per style (same format as the sheet's Size Chart column)
 };
 const CATEGORIES = {
-  half: { title: "Oversized Tees", sub: "Half Sleeve" },
-  full: { title: "Boxy Fit",       sub: "Full Sleeve" }
+  half:  { title: "Oversized Tees", sub: "Half Sleeve",           pill: "Oversized Tees · Half Sleeve" },
+  full:  { title: "Boxy Fit",       sub: "Full Sleeve",           pill: "Boxy Fit · Full Sleeve" },
+  plain: { title: "Plain Tees",     sub: "Acid Wash · Oversized", pill: "Acid Wash Plain Tees" }
 };
 /* ============================================ */
 
@@ -60,8 +62,9 @@ function toProduct(o, id){
   const images = [1,2,3,4].map(n => o["image " + n]).filter(Boolean);
   const sold = !inStock || (variants.length && variants.every(v => v.qty <= 0));
   const catRaw = (o["category"] || o["type"] || o["style"] || o["sleeve"] || "").toLowerCase();
-  const cat = /full|boxy/.test(catRaw) ? "full" : "half";      // blank = half sleeve
-  return {id, name:o["name"], price:Number(String(o["price"]).replace(/[^\d.]/g,"")) || 0, variants, images, sold, cat};
+  const cat = /plain/.test(catRaw) ? "plain" : /full|boxy/.test(catRaw) ? "full" : "half";      // blank = half sleeve
+  const chart = o["size chart"] || o["sizechart"] || o["size_chart"] || "";
+  return {id, name:o["name"], price:Number(String(o["price"]).replace(/[^\d.]/g,"")) || 0, variants, images, sold, cat, chart};
 }
 const parseProducts = text => parseCSV(text).filter(o => o["name"]).map(toProduct);
 
@@ -95,6 +98,7 @@ function render(){
         <div class="name">${esc(p.name)}</div>
         <div class="price">${p.price ? money(p.price) : "Price on WhatsApp"}</div>
         ${sizes}
+        <button type="button" class="sc-link" data-sc="${p.id}">Size chart</button>
         <div class="left">${left}</div>
         <button class="add" data-add="${p.id}" ${p.sold ? "disabled" : ""}>${p.sold ? "Sold out" : "Add to cart"}</button>
       </div></article>`;
@@ -102,6 +106,8 @@ function render(){
 }
 
 if ($("grid")) $("grid").addEventListener("click", e => {
+  const scb = e.target.closest("[data-sc]");
+  if (scb){ openChart(products[+scb.dataset.sc]); return; }
   const th = e.target.closest("[data-th]");
   if (th){ shown[th.dataset.th] = +th.dataset.i; render(); return; }
   const cy = e.target.closest("[data-cycle]");
@@ -119,6 +125,55 @@ if ($("grid")) $("grid").addEventListener("click", e => {
     save(); drawCart(); openCart();
   }
 });
+
+
+/* ---- size chart popup ---- */
+const chartFor = p => (p.chart || (CONFIG.SIZE_CHARTS && CONFIG.SIZE_CHARTS[p.cat]) || "").trim();
+/* Sheet cell format:  M=Chest 40, Length 27, Shoulder 18; L=Chest 42, Length 28, Shoulder 19   (or an image file name) */
+function parseChart(txt){
+  const rows = [], labels = [];
+  txt.split(/;|\n/).map(s => s.trim()).filter(Boolean).forEach(part => {
+    const m = part.match(/^([^=:]+)[=:](.*)$/); if (!m) return;
+    const cells = {};
+    m[2].split(",").forEach(c => {
+      const mm = c.trim().match(/^(.*?)\s+(\d[\d.\/ ]*\s*(?:in|inch|inches|cm|mm|")?)$/i);
+      if (mm && mm[1].trim()){ const l = mm[1].trim(); if (!labels.includes(l)) labels.push(l); cells[l] = mm[2].trim(); }
+    });
+    rows.push({size: m[1].trim(), cells});
+  });
+  return {labels, rows};
+}
+function openChart(p){
+  let m = $("scm");
+  if (!m){
+    m = document.createElement("div"); m.className = "scm"; m.id = "scm";
+    m.innerHTML = '<div class="box"><button class="x" aria-label="Close" id="scx">×</button><div id="scb"></div></div>';
+    document.body.appendChild(m);
+    const close = () => m.classList.remove("open");
+    m.addEventListener("click", e => { if (e.target === m) close(); });
+    $("scx").onclick = close;
+    document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+  }
+  const t = chartFor(p);
+  const wa = "https://wa.me/" + CONFIG.WHATSAPP + "?text=" + encodeURIComponent("Hi Neutral Basics! I need help choosing a size for: " + p.name);
+  let body;
+  if (t && (/\.(jpe?g|png|webp|gif)$/i.test(t) || /^https?:/i.test(t))){
+    body = '<img src="' + esc(imgUrl(t)) + '" alt="Size chart">';
+  } else {
+    const c = t ? parseChart(t) : null;
+    if (c && c.rows.length && c.labels.length){
+      body = '<table><thead><tr><th>Size</th>' + c.labels.map(l => '<th>' + esc(l) + '</th>').join("") + '</tr></thead><tbody>' +
+        c.rows.map(r => '<tr><td>' + esc(r.size) + '</td>' + c.labels.map(l => '<td>' + esc(r.cells[l] || "–") + '</td>').join("") + '</tr>').join("") + '</tbody></table>';
+    } else if (t){
+      body = '<p class="none" style="white-space:pre-line">' + esc(t) + '</p>';
+    } else {
+      body = '<p class="none">The size chart for this style is coming soon.</p><a class="wa-help" href="' + wa + '" target="_blank" rel="noopener">Ask on WhatsApp</a>';
+    }
+  }
+  $("scb").innerHTML = '<h3>Size chart</h3><div class="sub">' + esc(p.name) + '</div>' + body +
+    (t ? '<p class="tip">Not sure which size? <a href="' + wa + '" target="_blank" rel="noopener">Message us on WhatsApp</a>.</p>' : "");
+  m.classList.add("open");
+}
 
 function drawCart(){
   $("count").textContent = cart.reduce((a, c) => a + c.qty, 0);
@@ -153,6 +208,9 @@ $("checkout").onclick = () => {
   window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
 };
 
-if (CONFIG.INSTAGRAM){ const a = $("ig"); a.href = "https://instagram.com/" + CONFIG.INSTAGRAM; $("igt").textContent = "@" + CONFIG.INSTAGRAM.toUpperCase(); a.hidden = false; }
+if (CONFIG.INSTAGRAM) document.querySelectorAll("[data-ig]").forEach(a => {
+  a.href = "https://instagram.com/" + CONFIG.INSTAGRAM; a.hidden = false;
+  const s = a.querySelector(".igt"); if (s) s.textContent = "@" + CONFIG.INSTAGRAM;
+});
 $("yr").textContent = new Date().getFullYear();
 drawCart();
