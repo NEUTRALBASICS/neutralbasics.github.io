@@ -111,7 +111,7 @@ if ($("grid")) $("grid").addEventListener("click", e => {
   const th = e.target.closest("[data-th]");
   if (th){ shown[th.dataset.th] = +th.dataset.i; render(); return; }
   const cy = e.target.closest("[data-cycle]");
-  if (cy){ const p = products[+cy.dataset.cycle]; if (p.images.length > 1){ shown[p.id] = ((shown[p.id] || 0) + 1) % p.images.length; render(); } return; }
+  if (cy){ const p = products[+cy.dataset.cycle]; if (p.images.length) openZoom(p, shown[p.id] || 0); return; }
   const sz = e.target.closest("[data-size]");
   if (sz){ picked[sz.dataset.pid] = sz.dataset.size; render(); return; }
   const add = e.target.closest("[data-add]");
@@ -214,3 +214,62 @@ if (CONFIG.INSTAGRAM) document.querySelectorAll("[data-ig]").forEach(a => {
 });
 $("yr").textContent = new Date().getFullYear();
 drawCart();
+
+
+/* ---- photo zoom viewer: tap photo to open; pinch / double-tap / wheel to zoom, drag to move, arrows or swipe for next photo ---- */
+function openZoom(p, start){
+  const list = p.images.map(f => imgUrl(f)); let i = start || 0;
+  let z = document.getElementById("zm");
+  if (!z){
+    z = document.createElement("div"); z.id = "zm"; z.className = "zm";
+    z.innerHTML = '<button class="zx" aria-label="Close">&times;</button><button class="zp" aria-label="Previous">&#8249;</button><button class="zn" aria-label="Next">&#8250;</button><div class="zs"><img alt="" draggable="false"></div><div class="zc"></div><div class="zh">Double-tap or pinch to zoom</div>';
+    document.body.appendChild(z);
+  }
+  const img = z.querySelector("img"), stage = z.querySelector(".zs"), cnt = z.querySelector(".zc");
+  let sc = 1, tx = 0, ty = 0;
+  const apply = () => { img.style.transform = `translate(${tx}px,${ty}px) scale(${sc})`; };
+  const clamp = () => {
+    if (sc <= 1){ sc = 1; tx = ty = 0; return; }
+    const mx = (img.clientWidth * sc - stage.clientWidth) / 2, my = (img.clientHeight * sc - stage.clientHeight) / 2;
+    tx = Math.max(-Math.max(mx, 0), Math.min(Math.max(mx, 0), tx));
+    ty = Math.max(-Math.max(my, 0), Math.min(Math.max(my, 0), ty));
+  };
+  const show = n => {
+    i = (n + list.length) % list.length; sc = 1; tx = ty = 0; apply();
+    img.src = list[i]; cnt.textContent = list.length > 1 ? (i + 1) + " / " + list.length : "";
+    z.classList.toggle("single", list.length < 2);
+  };
+  const close = () => { z.classList.remove("open"); document.body.style.overflow = ""; document.removeEventListener("keydown", key); };
+  const key = e => { if (e.key === "Escape") close(); else if (e.key === "ArrowRight") show(i + 1); else if (e.key === "ArrowLeft") show(i - 1); };
+  // fresh handlers each open
+  z.querySelector(".zx").onclick = close;
+  z.querySelector(".zp").onclick = () => show(i - 1);
+  z.querySelector(".zn").onclick = () => show(i + 1);
+  const pts = new Map(); let d0 = 0, s0 = 1, moved = 0, lastTap = 0, sx = 0, sy = 0;
+  const dist = () => { const a = [...pts.values()]; return Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y); };
+  stage.onpointerdown = e => { stage.setPointerCapture(e.pointerId); pts.set(e.pointerId, {x: e.clientX, y: e.clientY}); moved = 0; sx = e.clientX; sy = e.clientY; if (pts.size === 2){ d0 = dist(); s0 = sc; } };
+  stage.onpointermove = e => {
+    if (!pts.has(e.pointerId)) return;
+    const o = pts.get(e.pointerId), dx = e.clientX - o.x, dy = e.clientY - o.y;
+    pts.set(e.pointerId, {x: e.clientX, y: e.clientY}); moved += Math.abs(dx) + Math.abs(dy);
+    if (pts.size === 2){ sc = Math.max(1, Math.min(5, s0 * dist() / d0)); }
+    else if (sc > 1){ tx += dx; ty += dy; }
+    clamp(); apply();
+  };
+  stage.onpointerup = stage.onpointercancel = e => {
+    if (!pts.has(e.pointerId)) return;
+    pts.delete(e.pointerId);
+    if (pts.size) return;
+    const tapped = moved < 8, now = Date.now();
+    if (tapped){
+      if (now - lastTap < 300){ sc = sc > 1 ? 1 : 2.5; tx = ty = 0; clamp(); apply(); lastTap = 0; } else lastTap = now;
+    } else if (sc === 1 && list.length > 1 && Math.abs(e.clientX - sx) > 60 && Math.abs(e.clientX - sx) > Math.abs(e.clientY - sy) * 1.5){
+      show(i + (e.clientX < sx ? 1 : -1));
+    }
+  };
+  stage.onwheel = e => { e.preventDefault(); sc = Math.max(1, Math.min(5, sc * (e.deltaY < 0 ? 1.15 : 0.87))); clamp(); apply(); };
+  z.onclick = e => { if (e.target === z) close(); };
+  document.addEventListener("keydown", key);
+  document.body.style.overflow = "hidden";
+  z.classList.add("open"); show(i);
+}

@@ -149,3 +149,16 @@
   .scm .tip{margin-top:14px;color:var(--stone);font-size:13px}
   .scm .tip a{color:var(--gold)}
   .scm .wa-help{display:inline-block;margin-top:16px;background:var(--green);color:var(--cream);padding:11px 22px;border-radius:999px;text-decoration:none;font-weight:600;letter-spacing:.1em;font-size:12px;text-transform:uppercase}
+
+  /* photo zoom viewer */
+  .img[data-cycle]{cursor:zoom-in}
+  .zm{position:fixed;inset:0;z-index:70;display:none;background:rgba(14,30,27,.96)}
+  .zm.open{display:block}
+  .zs{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none;cursor:grab}
+  .zs img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;user-select:none;-webkit-user-drag:none;will-change:transform}
+  .zm button{position:absolute;z-index:2;background:rgba(243,236,220,.14);color:var(--cream);border:0;border-radius:50%;width:44px;height:44px;font-size:28px;line-height:1;cursor:pointer}
+  .zx{top:14px;right:14px}
+  .zp,.zn{top:50%;margin-top:-22px}.zp{left:12px}.zn{right:12px}
+  .zm.single .zp,.zm.single .zn{display:none}
+  .zc{position:absolute;top:24px;left:0;right:0;text-align:center;color:var(--cream);font-size:13px;letter-spacing:.14em;pointer-events:none}
+  .zh{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:rgba(243,236,220,.6);font-size:12px;letter-spacing:.1em;pointer-events:none}
