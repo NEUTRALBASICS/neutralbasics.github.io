@@ -25,6 +25,7 @@
 
 <section class="fh" id="top">
   <div class="slides" id="slides"></div>
+  <video class="hv" id="heroVid" muted playsinline preload="auto" aria-hidden="true"></video>
   <div class="copy">
     <div class="eyebrow">New drop · Oversized tees</div>
     <h1>Nothing more.<br>Nothing less.</h1>
@@ -118,6 +119,25 @@ function heroFallback(){            // only if none of your hero photos exist: u
   await addSlide(heroFiles[0], true);                 // first photo gets priority
   for (const f of heroFiles.slice(1)) await addSlide(f);   // the rest load quietly afterwards
   heroEmpty = !okSlides().length; heroFallback();
+})();
+
+
+/* ---- hero video: plays on top of the photos once it is ready; photos stay as the fallback ---- */
+(function(){
+  const v = $("heroVid"); if (!v || !CONFIG.HERO_VIDEO) return;
+  if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  if (navigator.connection && (navigator.connection.saveData || /(^|-)2g$/.test(navigator.connection.effectiveType || ""))) return;
+  const src = (innerWidth < 800 && CONFIG.HERO_VIDEO_MOBILE) ? CONFIG.HERO_VIDEO_MOBILE : CONFIG.HERO_VIDEO;
+  let live = false;
+  v.addEventListener("canplay", () => {
+    if (live) return; live = true;
+    clearInterval(timer); timer = -1;                       // stop the photo slideshow
+    v.play().then(() => v.classList.add("on")).catch(() => { live = false; });
+  });
+  v.addEventListener("timeupdate", () => { if (v.duration && v.currentTime > v.duration - 0.6) v.classList.remove("on"); });
+  v.addEventListener("ended", () => { v.currentTime = 0; v.play().then(() => v.classList.add("on")).catch(() => {}); });
+  v.addEventListener("error", () => v.remove());
+  v.src = src;
 })();
 
 /* ---- style tiles ---- */

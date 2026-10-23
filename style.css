@@ -162,3 +162,7 @@
   .zm.single .zp,.zm.single .zn{display:none}
   .zc{position:absolute;top:24px;left:0;right:0;text-align:center;color:var(--cream);font-size:13px;letter-spacing:.14em;pointer-events:none}
   .zh{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:rgba(243,236,220,.6);font-size:12px;letter-spacing:.1em;pointer-events:none}
+
+  /* hero video */
+  .fh .hv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;opacity:0;transition:opacity .6s ease;z-index:0;pointer-events:none}
+  .fh .hv.on{opacity:1}

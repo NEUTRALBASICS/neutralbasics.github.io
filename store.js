@@ -7,6 +7,8 @@ const CONFIG = {
   INSTAGRAM: "neutral_basics_",      // your handle without @ (blank hides the links)
   HERO_IMAGES: ["hero-1.jpg","hero-2.jpg","hero-3.jpg","hero-4.jpg"],   // full-screen photos (landscape works best on computers)
   HERO_IMAGES_MOBILE: [],            // optional portrait versions for phones
+  HERO_VIDEO: "hero.mp4",            // background clip (silent). Leave "" to use photos only
+  HERO_VIDEO_MOBILE: "hero-m.mp4",    // smaller portrait clip for phones
   HERO_FOCUS: "center",              // "center", "top", "center 30%" ...
   HERO_SECONDS: 5,
   TILES: { half: "tile-half.jpg", full: "tile-full.png", plain: "tile-plain.jpg" },   // photos for the style tiles on the home page
