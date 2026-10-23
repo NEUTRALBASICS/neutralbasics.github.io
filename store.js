@@ -1,6 +1,6 @@
 /* ============ CONFIG: edit these ============ */
 const CONFIG = {
-  WHATSAPP: "919384615349",          // country code + number, no + or spaces
+  WHATSAPP: "918870107668",          // country code + number, no + or spaces
   SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTj7ktT3NmkMnsf7JuMV0YyJZZnA1PiPcuXNdLDsD_4JBLgCNWdLsFIfja_-P3JlxrWcOkr_zuExs7Z/pub?output=csv",
   IMAGE_BASE: "",                    // "" = images sit next to index.html. Use "images/" if they are in a folder.
   CURRENCY: "₹",
